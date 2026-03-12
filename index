@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE ELEGANT RESIDENCE | 高端房产品鉴</title>
+    <!-- 引入高级感衬线字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #F9F8F6; /* 温润的米白背景 */
+            --text-main: #2A2A2A;
+            --text-light: #7A7A7A;
+            --accent: #B0A18E; /* 高级灰褐色 */
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Helvetica Neue', Helvetica, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.8;
+        }
+
+        /* 字体类 */
+        .serif {
+            font-family: 'Playfair Display', 'Noto Serif SC', serif;
+        }
+        
+        h1, h2, h3 {
+            font-weight: 400;
+            margin: 0 0 20px 0;
+        }
+
+        p {
+            font-size: 15px;
+            color: var(--text-light);
+            text-align: justify;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--accent);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        /* 布局容器 */
+        section {
+            padding: 100px 8%;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .grid-2.reverse {
+            direction: rtl;
+        }
+        .grid-2.reverse > * {
+            direction: ltr;
+        }
+
+        /* 图片样式 */
+        .img-wrapper {
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+            background-color: #eaeaea; /* 图片加载前的占位背景色 */
+        }
+        
+        .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.7s ease;
+        }
+
+        .img-wrapper:hover img {
+            transform: scale(1.03); /* 鼠标悬停轻微放大 */
+        }
+
+        .img-caption {
+            font-size: 12px;
+            color: #999;
+            margin-top: 10px;
+            text-align: right;
+            font-family: 'Playfair Display', serif;
+            letter-spacing: 1px;
+        }
+
+        /* 首屏封面 (Hero Section) */
+        .hero {
+            height: 100vh;
+            padding: 0;
+            /* 替换本地图片时，修改这里的 url('HouseFront.png') */
+            background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #fff;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.6));
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            padding: 40px;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            letter-spacing: 4px;
+            margin-bottom: 15px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            color: #f0f0f0;
+            font-size: 1.2rem;
+            letter-spacing: 8px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        /* 装饰线 */
+        .line {
+            width: 60px;
+            height: 1px;
+            background-color: var(--accent);
+            margin: 30px 0;
+        }
+
+        /* 拼图网格 */
+        .collage {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+        }
+        .collage-col {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .collage img {
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 动画类 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 页脚 */
+        footer {
+            background-color: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            padding: 80px 20px;
+        }
+        footer h2 {
+            font-size: 24px;
+            letter-spacing: 2px;
+        }
+        footer p {
+            color: #888;
+            text-align: center;
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 900px) {
+            .grid-2 { grid-template-columns: 1fr; gap: 40px; }
+            .grid-2.reverse { direction: ltr; }
+            .hero h1 { font-size: 2.5rem; }
+            section { padding: 60px 5%; }
+            .collage { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Cover -->
+    <header class="hero">
+        <div class="hero-content reveal">
+            <h1 class="serif">THE ELEGANT RESIDENCE</h1>
+            <p class="serif">城市静谧之邸</p>
+        </div>
+    </header>
+
+    <!-- Slide 2: Floor Plan -->
+    <section>
+        <div class="container grid-2">
+            <div class="text-box reveal">
+                <span class="subtitle">Layout & Flow</span>
+                <h2 class="serif">空间与动线规划</h2>
+                <div class="line"></div>
+                <p>科学合理的动线规划，将家庭的欢聚空间与私密休息区完美区隔。宽敞的起居空间最大化引入自然光线，流畅的家务动线让日常生活更加从容优雅。</p>
+                <p>• 动静分离，保障生活私密性<br>• 充足收纳与高效空间利用<br>• 引入自然光与微风的考量设计</p>
+            </div>
+            <div class="img-box reveal" style="transition-delay: 0.2s;">
+                <div class="img-wrapper">
+                    <!-- 【替换指引】本地使用时，将 src 替换为："スクリーンショット 2026-03-12 111131.png" -->
+                    <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Floor Plan" onerror="this.src='https://via.placeholder.com/800x600?text=图片加载失败'">
+                </div>
+                <div class="img-caption">1F & 2F Floor Plan</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 3: Exterior & Garage -->
+    <section style="background-color: #fff;">
+        <div class="container">
+            <div class="reveal" style="text-align: center; max-width: 600px; margin: 0 auto 60px;">
+                <span class="subtitle">Exterior Aesthetics</span>
+                <h2 class="serif">沉稳内敛的建筑美学</h2>
+                <div class="line" style="margin: 20px auto;"></div>
+                <p>简约而不失庄重的立面外观，经得起时间的考验。建筑不仅是居住的容器，更是融入社区景观的艺术品。配备宽敞专属车库，满足现代家庭的出行需求。</p>
+            </div>
+            
+            <div class="collage reveal">
+                <div class="img-wrapper">
+                    <!-- 【替换指引】本地使用时，将 src 替换为："HouseBack.png" -->
+                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="House Exterior Back" style="height: 620px;" onerror="this.src='https://via.placeholder.com/800x1200?text=HouseBack'">
+                </div>
+                <div class="collage-col">
+                    <div class="img-wrapper">
+                        <!-- 【替换指引】本地使用时，将 src 替换为："HouseFront.png" -->
+                        <img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="House Front detail" style="height: 300px;" onerror="this.src='https://via.placeholder.com/800x600?text=HouseFront'">
+                    </div>
+                    <div class="img-wrapper">
+                        <!-- 【替换指引】本地使用时，将 src 替换为："Garage.png" -->
+                        <img src="https://images.unsplash.com/photo-1605810754854-159c40db24da?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Spacious Garage" style="height: 300px;" onerror="this.src='https://via.placeholder.com/800x600?text=Garage'">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 4: Living & Dining -->
+    <section>
+        <div class="container grid-2 reverse">
+            <div class="text-box reveal">
+                <span class="subtitle">The Heart of the Home</span>
+                <h2 class="serif">欢聚与品味的中心</h2>
+                <div class="line"></div>
+                <p>宽敞明亮的起居室（Living Room）是全家人共享温馨时光的开阔主场。大面积的采光窗将室外光影引入室内，赋予空间灵动的生命力。</p>
+                <p>高品质的客餐厅（Kitchen & Dining）空间无缝连接，宽敞的操作台面让烹饪成为一种享受，无论是家庭聚餐还是款待宾客，皆游刃有余。</p>
+            </div>
+            <div class="img-box reveal" style="transition-delay: 0.2s;">
+                <div class="img-wrapper" style="margin-bottom: 30px; height: 350px;">
+                    <!-- 【替换指引】本地使用时，将 src 替换为："LivingRoom.png" -->
+                    <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Living Room" onerror="this.src='https://via.placeholder.com/800x500?text=LivingRoom'">
+                </div>
+                <div class="img-wrapper" style="height: 350px;">
+                    <!-- 【替换指引】本地使用时，将 src 替换为："Kitchen&Dining.png" -->
+                    <img src="https://images.unsplash.com/photo-1600489000022-c2086d79f9d4?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Kitchen and Dining" onerror="this.src='https://via.placeholder.com/800x500?text=Kitchen%26Dining'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 5: Private Quarters (Bedroom & Washitsu) -->
+    <section style="background-color: #fff;">
+        <div class="container">
+            <div class="text-box reveal" style="text-align: center; margin-bottom: 60px;">
+                <span class="subtitle">Tranquility & Rest</span>
+                <h2 class="serif">喧嚣之外的静谧空间</h2>
+                <div class="line" style="margin: 20px auto;"></div>
+            </div>
+            
+            <div class="grid-2">
+                <div class="reveal">
+                    <div class="img-wrapper" style="height: 400px;">
+                        <!-- 【替换指引】本地使用时，将 src 替换为："Bedroom1.png" -->
+                        <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Bedroom" onerror="this.src='https://via.placeholder.com/800x600?text=Bedroom1'">
+                    </div>
+                    <h3 class="serif" style="margin-top: 20px; font-size: 20px;">主卧 / Master Bedroom</h3>
+                    <p>空间方正，色调柔和，为您提供深度睡眠的安宁环境。早晨的第一缕阳光将在这里唤醒您的新一天。</p>
+                </div>
+                <div class="reveal" style="transition-delay: 0.2s;">
+                    <div class="img-wrapper" style="height: 400px;">
+                        <!-- 【替换指引】本地使用时，将 src 替换为："Washitsu1.png" -->
+                        <img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Washitsu" onerror="this.src='https://via.placeholder.com/800x600?text=Washitsu1'">
+                    </div>
+                    <h3 class="serif" style="margin-top: 20px; font-size: 20px;">和室 / Tatami Room</h3>
+                    <p>充满传统日式风情的和室，散发着自然的蔺草香。可作为客房、静心茶室或儿童游戏区，功能灵活多变。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 6: Details -->
+    <section>
+        <div class="container grid-2">
+            <div class="text-box reveal">
+                <span class="subtitle">Exquisite Details</span>
+                <h2 class="serif">兼顾美观与实用的细节</h2>
+                <div class="line"></div>
+                <p>真正的奢华隐藏在日常的细节之中。清洁感十足的现代化盥洗空间（Powder Room），动线合理，干湿分离设计提升生活效率。</p>
+                <p>精心设计的室内楼梯（Stairs）不仅连接了上下楼层的空间，更以其优良的质感与光影变化，成为了家中的视觉艺术过渡带。</p>
+            </div>
+            <div class="collage-col reveal" style="transition-delay: 0.2s;">
+                <div class="img-wrapper" style="height: 300px;">
+                    <!-- 【替换指引】本地使用时，将 src 替换为："PowderRoom.png" -->
+                    <img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Powder Room" onerror="this.src='https://via.placeholder.com/800x400?text=PowderRoom'">
+                </div>
+                <div class="img-wrapper" style="height: 300px;">
+                    <!-- 【替换指引】本地使用时，将 src 替换为："Stairs.png" -->
+                    <img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Stairs Detail" onerror="this.src='https://via.placeholder.com/800x400?text=Stairs'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer / Contact -->
+    <footer>
+        <div class="container reveal">
+            <span class="subtitle" style="color: #fff;">Schedule a Viewing</span>
+            <h2 class="serif" style="margin-bottom: 40px;">诚邀品鉴</h2>
+            <p>本宣传资料中的图片及平面图仅供参考，实际情况以房屋现状及最终合同为准。</p>
+            <div class="line" style="margin: 40px auto; background-color: #444;"></div>
+            <p style="color: #fff; font-size: 18px;">VIP 专属看房预约</p>
+            <p style="color: #b0a18e; font-size: 20px; font-weight: bold; font-family: 'Helvetica', sans-serif;">+81 00-0000-0000</p>
+            <p>info@premium-realestate.jp</p>
+        </div>
+    </footer>
+
+    <!-- 滚动动画脚本 -->
+    <script>
+        function reveal() {
+            var reveals = document.querySelectorAll(".reveal");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 100; // 元素距离视口底部多少像素时触发动画
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        // 页面加载时触发一次，确保首屏元素显示
+        reveal();
+    </script>
+</body>
+</html>
